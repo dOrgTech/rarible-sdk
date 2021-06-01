@@ -15,25 +15,6 @@ export interface Asset {
     assetType: AssetType,
 }
 
-export interface Order {
-    makerAddress: string,
-    makeAsset: Asset,
-    takerAddress: string,
-    takeAsset: Asset,
-    /**
-    * Random number to distinguish between a maker's orders
-    **/
-    salt: number,
-    /**
-    * Order can't be matched before this date (optional)
-    **/
-    start?: number,
-    /**
-    * Order can't be matched after this date (optional)
-    **/
-    end?: number,
-}
-
 export interface Configuration {
     apiBaseUrl?: string;
     contractsVersion?: 'v1' | 'v2';
