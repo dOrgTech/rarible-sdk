@@ -10,13 +10,13 @@ export interface Order {
     **/
     salt: number,
     /**
-    * Order can't be matched before this date (optional)
+    * Order can't be matched before this block timestamp (optional)
     **/
-    start?: number,
+    startBlockTimestamp?: number,
     /**
-    * Order can't be matched after this date (optional)
+    * Order can't be matched after this block timestamp (optional)
     **/
-    end?: number,
+    endBlockTimestamp?: number,
 }
 
 export interface OrderFilter {
