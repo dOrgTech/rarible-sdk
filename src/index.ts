@@ -15,22 +15,17 @@ export declare class RaribleSDK {
 
   /**
    * Buys an item or accepts a bid.
-   * This will also upload the NFT to IPFS using Pinata.
    *
-   * @param {object} data - Mint Data.
-   *  @param {string} data.to - Address to transfer the NFT.
-   *  @param {object} data.data - NFT Metadata.
-   *  @param {object} data.uri - NFT URI.
-   *  @param {number} [data.supply] - Supply amount (only for ERC-1155 tokens).
-   *  @param {object[]} [data.creators] - Array of creators.
-   *  @param {object[]} [data.royalties] - Array of royalties.
-   * @param {object} metadata - Mint Metadata.
+   * @param {Order} buyOrder - Buying order.
+   * @param {string} buySignature - Buyer's signature.
+   * @param {Order} sellOrder - Selling order.
+   * @param {string} sellSignature - Sellers's signature (optional).
    */
    public acceptOrder(
     buyOrder: Order,
-    buySignature: string,
+    buyerSignature: string,
     sellOrder: Order,
-    sellSignature: string,
+    sellerSignature?: string,
   ): Promise<MatchEvent>;
 
   /**
