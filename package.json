@@ -1,5 +1,5 @@
 {
-  "name": "rarible-sdk",
+  "name": "@rarible/sdk-js",
   "version": "0.0.1",
   "description": "Rarible SDK",
   "author": "dOrg",

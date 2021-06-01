@@ -1,7 +1,7 @@
 import Web3 from "web3";
 import Web3Core from "web3-core";
 import { BasicMintMetadata, MintData, MintMetadata } from "./models/mint";
-import { PinataCredentials } from "./models/pinata";
+import { RaribleSDKConfiguration } from "./models/commons";
 
 /**
  * Rarible SDK - Interface
@@ -10,18 +10,11 @@ export declare class RaribleSDK {
   private provider: Web3Core.provider;
   private web3: Web3;
 
-  constructor(
-    provider: Web3Core.provider,
-    options: {
-      erc721ContractAddress?: string;
-      erc1155ContractAddress?: string;
-      apiBaseUrl?: string;
-      subgraphUrl?: string;
-    }
-  );
+  constructor(provider: Web3Core.provider, options: RaribleSDKConfiguration);
 
   /**
    * Mint a new NFT.
+   * This will required that your NFT is already hosted in IPFS.
    *
    * @param {object} data - Mint Data.
    *  @param {string} data.to - Address to transfer the NFT.
@@ -46,11 +39,9 @@ export declare class RaribleSDK {
    *  @param {object[]} [data.creators] - Array of creators.
    *  @param {object[]} [data.royalties] - Array of royalties.
    * @param {object} metadata - Mint Metadata.
-   * @param {object} pinataCredentials - Pinata Credentials to upload NFT to IPFS using Pinata.
    */
   public mint(
     data: MintData,
-    metadata: BasicMintMetadata,
-    pinataCredentials: PinataCredentials
+    metadata: BasicMintMetadata
   ): Promise<MintMetadata>;
 }
