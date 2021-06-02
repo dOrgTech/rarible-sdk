@@ -20,9 +20,9 @@ export interface Order {
 }
 
 export interface OrderFilter {
-    origin: string,
-    sort: 'LAST_UPDATE',
-    size: number,
+    origin?: string,
+    sort?: 'LAST_UPDATE',
+    size?: number,
     continuation?: string, 
 }
 
