@@ -1,7 +1,9 @@
 import Web3 from "web3";
 import Web3Core from "web3-core";
 import { BasicMintMetadata, MintData, MintMetadata } from "./models/mint";
-import { RaribleSDKConfiguration } from "./models/commons";
+import { Configuration } from "./models/commons";
+import { MatchEvent } from "./models/events";
+import { Order, OrderFilter } from "./models/orders";
 
 /**
  * Rarible SDK - Interface
@@ -10,7 +12,22 @@ export declare class RaribleSDK {
   private provider: Web3Core.provider;
   private web3: Web3;
 
-  constructor(provider: Web3Core.provider, options: RaribleSDKConfiguration);
+  constructor(provider: Web3Core.provider, options: Configuration);
+
+  /**
+   * Buys an item or accepts a bid.
+   *
+   * @param {Order} buyOrder - Buying order.
+   * @param {string} buySignature - Buyer's signature.
+   * @param {Order} sellOrder - Selling order.
+   * @param {string} sellSignature - Sellers's signature (optional).
+   */
+   public acceptOrder(
+    buyOrder: Order,
+    buyerSignature: string,
+    sellOrder: Order,
+    sellerSignature?: string,
+  ): Promise<MatchEvent>;
 
   /**
    * Mint a new NFT.
@@ -44,4 +61,31 @@ export declare class RaribleSDK {
     data: MintData,
     metadata: BasicMintMetadata
   ): Promise<MintMetadata>;
+
+  /**
+   * Gets an Order given an order's hash.
+   *
+   * @param {string} hash - Hash of the order.
+   */
+  public getOrder(
+    hash: string
+  ): Promise<Order>;
+
+   /**
+   * Gets a Sell Order given a filter.
+   *
+   * @param {OrderFilter} filter - Defines criteria to filter orders by.
+   */
+  public getSellOrder(
+    filter: OrderFilter
+  ): Promise<Order>;
+
+  /**
+   * Gets a Buy Order given a filter.
+   *
+   * @param {OrderFilter} filter - Defines criteria to filter orders by.
+   */
+   public getBuyOrder(
+    filter: OrderFilter
+  ): Promise<Order>;
 }
