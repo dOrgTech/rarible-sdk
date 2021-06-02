@@ -12,11 +12,11 @@ export interface AssetType {
     * For example, for an asset class of ERC-20, the data holds the address of the token.
     * For ERC-721 data holds smart contract address and tokenId.
     **/
-    data: any,
+    data: any
 }
 
 export interface Asset {
-    amount: number,
+    value: number,
     assetType: AssetType,
 }
 
