@@ -3,7 +3,7 @@ import Web3Core from "web3-core";
 import { BasicMintMetadata, MintData, MintMetadata } from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
-import { Order, OrderFilter, SellOrder, SellOrderResponse } from "./models/orders";
+import { Order, OrderFilter, SellOrder, SellOrderResponse, SearchFilter } from "./models/orders";
 
 /**
  * Rarible SDK - Interface
@@ -96,5 +96,14 @@ export declare class RaribleSDK {
    */
    public getBuyOrder(
     filter: OrderFilter
+  ): Promise<Order>;
+
+  /**
+   * Search orders
+   *
+   * @param {SearchFilter} filter - Defines criteria to filter orders by.
+   */
+   public searchOrders(
+    filter: SearchFilter
   ): Promise<Order>;
 }
