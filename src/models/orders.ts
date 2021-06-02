@@ -21,8 +21,8 @@ export interface Order {
 
 export interface OrderFilter {
     origin: string,
-    sort: 'LAST_UPDATE',
-    size: number,
+    sort?: 'LAST_UPDATE',
+    size?: number,
     continuation?: string, 
 }
 
@@ -37,4 +37,12 @@ export interface OrderMakerFilter extends OrderFilter {
 export interface OrderItemFilter extends OrderFilter {
     contractAddress: string,
     tokenId: BigInteger,
+}
+
+export interface SearchFilter extends OrderFilter{
+    type: "sell" | "sell_by_maker" | "sell_by_item" | "sell_by_collection" | "bid_by_item" | "bid_by_maker",
+    maker?: string,
+    token?: string,
+    tokenId?: BigInteger,
+    collection?: string
 }
