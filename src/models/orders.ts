@@ -43,12 +43,18 @@ export interface OrderItemFilter extends OrderFilter {
  * Sell Orders
  **/
 
-export interface Allotment {
-  account: string
-  value: number
+export interface SellOrder extends Order {
+  type: 'RARIBLE_V1' | 'RARIBLE_V2'
+  data: SellData
+  /**
+   * signature: Mentioned in API docs but
+   * should be calculated under the hood
+   * https://docs.rarible.com/exchange/creating-a-sell-order
+   * https://api-reference.rarible.com/#operation/createOrUpdateOrder
+   **/
 }
 
-// If supporting LEGACY, need 'fee'. 
+// If supporting LEGACY, need 'fee'.
 export interface SellData {
   dataType: 'RARIBLE_V2_DATA_V1' | 'LEGACY'
   payouts?: Allotment[]
@@ -56,15 +62,9 @@ export interface SellData {
   fee?: number
 }
 
-export interface SellOrder extends Order {
-  type: 'RARIBLE_V1' | 'RARIBLE_V2'
-  data: SellData
-  /**
-   * signature: Mentioned in API docs but 
-   * should be calculated under the hood
-   * https://docs.rarible.com/exchange/creating-a-sell-order
-   * https://api-reference.rarible.com/#operation/createOrUpdateOrder
-   **/
+export interface Allotment {
+  account: string
+  value: number
 }
 
 export interface SellOrderResponse extends SellOrder {
