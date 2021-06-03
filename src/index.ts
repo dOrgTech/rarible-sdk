@@ -1,33 +1,24 @@
-import Web3 from "web3";
-import Web3Core from "web3-core";
-import { BasicMintMetadata, MintData, MintMetadata } from "./models/mint";
+import {
+  BasicMintMetadata,
+  LazyMintData,
+  LazyMintResponse,
+  MintData,
+  MintMetadata,
+  TokenType,
+} from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
 import { Order, OrderFilter, SellOrder, SellOrderResponse, SearchFilter } from "./models/orders";
+import { Signer } from "ethers";
 
 /**
  * Rarible SDK - Interface
  */
 export declare class RaribleSDK {
-  private provider: Web3Core.provider;
-  private web3: Web3;
+  private signer: Signer;
+  public readonly options: Configuration;
 
-  constructor(provider: Web3Core.provider, options: Configuration);
-
-  /**
-   * Buys an item or accepts a bid.
-   *
-   * @param {Order} buyOrder - Buying order.
-   * @param {string} buySignature - Buyer's signature.
-   * @param {Order} sellOrder - Selling order.
-   * @param {string} sellSignature - Sellers's signature (optional).
-   */
-   public acceptOrder(
-    buyOrder: Order,
-    buyerSignature: string,
-    sellOrder: Order,
-    sellerSignature?: string,
-  ): Promise<MatchEvent>;
+  constructor(provider: Signer, options: Configuration);
 
   /**
    * Mint a new NFT.
@@ -63,13 +54,51 @@ export declare class RaribleSDK {
   ): Promise<MintMetadata>;
 
   /**
+   * Mint a new NFT.
+   * This will also upload the NFT to IPFS using Pinata.
+   *
+   * @param {object} data - Lazy Mint Data.
+   */
+  public lazyMint(data: LazyMintData): Promise<LazyMintResponse>;
+
+  /**
+   * Get Lazy Mint NFT information.
+   *
+   * @param {string} id - Lazy Mint Id.
+   */
+  public getLazyMint(id: LazyMintResponse["id"]): Promise<LazyMintData>;
+
+  /**
+   * Get the next available tokenId for minter.
+   *
+   * @param {string} tokenType - Token Type ERC721 or ERC1155.
+   * @param {string} minter - Token Minter.
+   * @returns {Promise<string>} - TokenId
+   * @private
+   */
+  private getTokenId(tokenType: TokenType, minter: string): Promise<string>;
+
+  /**
+   * Buys an item or accepts a bid.
+   *
+   * @param {Order} buyOrder - Buying order.
+   * @param {string} buyerSignature - Buyer's signature.
+   * @param {Order} sellOrder - Selling order.
+   * @param {string} sellerSignature - Sellers's signature (optional).
+   */
+  public acceptOrder(
+    buyOrder: Order,
+    buyerSignature: string,
+    sellOrder: Order,
+    sellerSignature?: string
+  ): Promise<MatchEvent>;
+
+  /**
    * Gets an Order given an order's hash.
    *
    * @param {string} hash - Hash of the order.
    */
-  public getOrder(
-    hash: string
-  ): Promise<Order>;
+  public getOrder(hash: string): Promise<Order>;
 
    /**
    * Creates a Sell Order.
@@ -85,9 +114,7 @@ export declare class RaribleSDK {
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getSellOrder(
-    filter: OrderFilter
-  ): Promise<Order>;
+  public getSellOrders(filter: OrderFilter): Promise<Order>;
 
   /**
    * Gets a Buy Order given a filter.
