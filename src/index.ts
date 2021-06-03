@@ -1,5 +1,7 @@
 import {
   BasicMintMetadata,
+  LazyMintData,
+  LazyMintResponse,
   MintData,
   MintMetadata,
   TokenType,
@@ -65,6 +67,21 @@ export declare class RaribleSDK {
     data: MintData,
     metadata: BasicMintMetadata
   ): Promise<MintMetadata>;
+
+  /**
+   * Mint a new NFT.
+   * This will also upload the NFT to IPFS using Pinata.
+   *
+   * @param {object} data - Lazy Mint Data.
+   */
+  public lazyMint(data: LazyMintData): Promise<LazyMintResponse>;
+
+  /**
+   * Get Lazy Mint NFT information.
+   *
+   * @param {string} id - Lazy Mint Id.
+   */
+  public getLazyMint(id: LazyMintResponse["id"]): Promise<LazyMintData>;
 
   /**
    * Get the next available tokenId for minter.

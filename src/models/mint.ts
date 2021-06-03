@@ -50,6 +50,38 @@ export interface ERC1155MintData extends ERC721MintData {
 
 export type MintData = ERC721MintData | ERC1155MintData;
 
+export interface ERC721LazyMint extends Omit<ERC721MintData, "to"> {
+  /**
+   * NFT as ERC-721 Non-Fungible Token Standard.
+   */
+  "@type": "ERC721";
+
+  contract: string;
+}
+
+export interface ERC1155LazyMint extends Omit<ERC1155MintData, "to"> {
+  /**
+   * NFT as ERC-1155 Multi Token Standard.
+   */
+  "@type": "ERC1155";
+
+  contract: string;
+}
+
+export type LazyMintData = ERC721LazyMint | ERC1155LazyMint;
+
+export interface LazyMintResponse {
+  id: string;
+  contract: string;
+  tokenId: string;
+  creator?: string;
+  supply: number;
+  lazySupply: number;
+  owners: string[];
+  royalties: PartOwner[];
+  pending: ItemTransfer[];
+}
+
 export interface MintMetadata {
   name: string;
   description: string;
