@@ -1,4 +1,14 @@
-export interface MintData {
+import { BigNumberish } from "ethers";
+import { ItemTransfer } from "./transfers";
+
+export type TokenType = "ERC721" | "ERC1155";
+
+export interface PartOwner {
+  address: string; // Address of the Owner
+  value: BigNumberish; // Percentage of the Owner with 2 decimals. Ex: 10000 -> 100%, 9705 -> 97.05%
+}
+
+export interface ERC721MintData {
   /**
    * Address to transfer the NFT after minting,
    * And this address will be considered as the Owner.
@@ -9,24 +19,19 @@ export interface MintData {
    */
   uri: string;
   /**
-   * supply should be supplied as an uint256, this is the number of copies (Editions)
-   * of this token that exist. (Maximum value is 2**256 - 1).
-   */
-  supply?: number; // Supply
-  /**
    * creators is supplied as an array of Owner, this array should contain all
    * the addresses (with their respective part of the creation - in basis points)
    * who are considered the authors/creators of this token.
    * The address array is public and can be queried by anyone.
    * Sum of fields value in this array should be 10000 (100% in basis points)
    */
-  creators: Owner[];
+  creators: PartOwner[];
   /**
    * royalties are an array of addresses and values.
    * The fees array is public and can be queried by anyone.
    * Values are specified in basis points. So for example, 200 means 2%
    */
-  royalties: Owner[];
+  royalties: PartOwner[];
   /**
    * Signatures is an array of wallet signatures for this transaction from every creator,
    * the only exception to this is when the creator sends the mint transaction - then empty signature
@@ -34,6 +39,16 @@ export interface MintData {
    */
   signatures: string[];
 }
+
+export interface ERC1155MintData extends ERC721MintData {
+  /**
+   * supply should be supplied as an uint256, this is the number of copies (Editions)
+   * of this token that exist. (Maximum value is 2**256 - 1).
+   */
+  supply: BigNumberish;
+}
+
+export type MintData = ERC721MintData | ERC1155MintData;
 
 export interface MintMetadata {
   name: string;
@@ -53,9 +68,4 @@ export interface BasicMintMetadata
   extends Pick<MintMetadata, "name" | "description" | "attributes"> {
   image: Blob;
   animation: Blob;
-}
-
-export interface Owner {
-  address: string; // Address of the Owner
-  value: number; // Percentage of the Owner with 2 decimals. Ex: 10000 -> 100%, 9705 -> 97.05%
 }
