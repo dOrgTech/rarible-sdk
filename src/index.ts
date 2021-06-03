@@ -8,7 +8,13 @@ import {
 } from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
-import { Order, OrderFilter, SellOrder, SellOrderResponse, SearchFilter } from "./models/orders";
+import {
+  Order,
+  OrderFilter,
+  SellOrder,
+  SellOrderResponse,
+  SearchFilter,
+} from "./models/orders";
 import { Signer } from "ethers";
 
 /**
@@ -100,16 +106,31 @@ export declare class RaribleSDK {
    */
   public getOrder(hash: string): Promise<Order>;
 
-   /**
+  /**
    * Creates a Sell Order.
    *
    * @param {SellOrder} sellOrder - Creates sell order.
    */
-  public createSellOrder(
-      sellOrder: SellOrder
-    ): Promise<SellOrderResponse>;
+  public createSellOrder(sellOrder: SellOrder): Promise<SellOrderResponse>;
 
-   /**
+  /**
+   * Update a Sell Order.
+   * The price can only be lowered and not increased,
+   * to increase the price you will need to cancel the order and create a new one.
+   *
+   * @param {SellOrder} sellOrder - sell order.
+   */
+  public updateSellOrder(sellOrder: SellOrder): Promise<SellOrderResponse>;
+
+  /**
+   * Cancel a Sell Order.
+   * Canceling an order needs to be done on-chain.
+   *
+   * @param {SellOrder} sellOrder - sell order.
+   */
+  public cancelSellOrder(sellOrder: SellOrder): Promise<void>;
+
+  /**
    * Gets a Sell Order given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
@@ -121,16 +142,12 @@ export declare class RaribleSDK {
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-   public getBuyOrder(
-    filter: OrderFilter
-  ): Promise<Order>;
+  public getBuyOrder(filter: OrderFilter): Promise<Order>;
 
   /**
    * Search orders
    *
    * @param {SearchFilter} filter - Defines criteria to filter orders by.
    */
-   public searchOrders(
-    filter: SearchFilter
-  ): Promise<Order>;
+  public searchOrders(filter: SearchFilter): Promise<Order>;
 }
