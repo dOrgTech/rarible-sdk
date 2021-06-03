@@ -5,6 +5,11 @@ import {
   MintingMetadata,
   MintMetadata,
   TokenType,
+  ItemById,
+  ItemsPagination,
+  ItemsByOwner,
+  ItemsByCreator,
+  ItemsByCollection
 } from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
@@ -83,6 +88,8 @@ export declare class RaribleSDK {
    * @param {Order} sellOrder - Selling order.
    * @param {string} sellerSignature - Sellers's signature (optional).
    */
+  
+    
   public acceptOrder(
     buyOrder: Order,
     buyerSignature: string,
