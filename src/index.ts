@@ -76,7 +76,7 @@ export declare class RaribleSDK {
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getSellOrder(
+  public getSellOrders(
     filter: OrderFilter
   ): Promise<Order>;
 
@@ -85,7 +85,7 @@ export declare class RaribleSDK {
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-   public getBuyOrder(
+   public getBuyOrders(
     filter: OrderFilter
   ): Promise<Order>;
 }
