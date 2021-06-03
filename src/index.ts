@@ -3,7 +3,7 @@ import Web3Core from "web3-core";
 import { BasicMintMetadata, MintData, MintMetadata } from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
-import { Order, OrderFilter, SellOrder, SellOrderResponse, SearchFilter } from "./models/orders";
+import { Order, OrderFilter, SearchFilter } from "./models/orders";
 
 /**
  * Rarible SDK - Interface
@@ -22,11 +22,11 @@ export declare class RaribleSDK {
    * @param {Order} sellOrder - Selling order.
    * @param {string} sellSignature - Sellers's signature (optional).
    */
-   public acceptOrder(
+  public acceptOrder(
     buyOrder: Order,
     buyerSignature: string,
     sellOrder: Order,
-    sellerSignature?: string,
+    sellerSignature?: string
   ): Promise<MatchEvent>;
 
   /**
@@ -67,43 +67,33 @@ export declare class RaribleSDK {
    *
    * @param {string} hash - Hash of the order.
    */
-  public getOrder(
-    hash: string
-  ): Promise<Order>;
+  public getOrder(hash: string): Promise<Order>;
 
-   /**
+  /**
    * Creates a Sell Order.
    *
-   * @param {SellOrder} sellOrder - Creates sell order.
+   * @param {Order} order - Creates sell order.
    */
-  public createSellOrder(
-      sellOrder: SellOrder
-    ): Promise<SellOrderResponse>;
+  public createOrder(order: Order): Promise<Order>;
 
-   /**
+  /**
    * Gets a Sell Order given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getSellOrder(
-    filter: OrderFilter
-  ): Promise<Order>;
+  public getSellOrder(filter: OrderFilter): Promise<Order>;
 
   /**
    * Gets a Buy Order given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-   public getBuyOrder(
-    filter: OrderFilter
-  ): Promise<Order>;
+  public getBuyOrder(filter: OrderFilter): Promise<Order>;
 
   /**
    * Search orders
    *
    * @param {SearchFilter} filter - Defines criteria to filter orders by.
    */
-   public searchOrders(
-    filter: SearchFilter
-  ): Promise<Order>;
+  public searchOrders(filter: SearchFilter): Promise<Order>;
 }
