@@ -1,8 +1,8 @@
 import {
-  BasicMintMetadata,
   LazyMintData,
   LazyMintResponse,
   MintData,
+  MintingMetadata,
   MintMetadata,
   TokenType,
 } from "./models/mint";
@@ -48,10 +48,7 @@ export declare class RaribleSDK {
    *  @param {object[]} [data.royalties] - Array of royalties.
    * @param {object} metadata - Mint Metadata.
    */
-  public mint(
-    data: MintData,
-    metadata: BasicMintMetadata
-  ): Promise<MintMetadata>;
+  public mint(data: MintData, metadata: MintingMetadata): Promise<MintMetadata>;
 
   /**
    * Mint a new NFT.
