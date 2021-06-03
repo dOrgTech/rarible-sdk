@@ -21,21 +21,6 @@ export declare class RaribleSDK {
   constructor(provider: Signer, options: Configuration);
 
   /**
-   * Buys an item or accepts a bid.
-   *
-   * @param {Order} buyOrder - Buying order.
-   * @param {string} buyerSignature - Buyer's signature.
-   * @param {Order} sellOrder - Selling order.
-   * @param {string} sellerSignature - Sellers's signature (optional).
-   */
-  public acceptOrder(
-    buyOrder: Order,
-    buyerSignature: string,
-    sellOrder: Order,
-    sellerSignature?: string
-  ): Promise<MatchEvent>;
-
-  /**
    * Mint a new NFT.
    * This will required that your NFT is already hosted in IPFS.
    *
@@ -92,6 +77,21 @@ export declare class RaribleSDK {
    * @private
    */
   private getTokenId(tokenType: TokenType, minter: string): Promise<string>;
+
+  /**
+   * Buys an item or accepts a bid.
+   *
+   * @param {Order} buyOrder - Buying order.
+   * @param {string} buyerSignature - Buyer's signature.
+   * @param {Order} sellOrder - Selling order.
+   * @param {string} sellerSignature - Sellers's signature (optional).
+   */
+  public acceptOrder(
+    buyOrder: Order,
+    buyerSignature: string,
+    sellOrder: Order,
+    sellerSignature?: string
+  ): Promise<MatchEvent>;
 
   /**
    * Gets an Order given an order's hash.
