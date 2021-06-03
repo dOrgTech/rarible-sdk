@@ -77,23 +77,27 @@ export declare class RaribleSDK {
   public createOrder(order: Order): Promise<Order>;
 
   /**
-   * Gets a Sell Order given a filter.
+   * Gets Sell Orders given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getSellOrder(filter: OrderFilter): Promise<Order>;
+  public getSellOrders(
+    filter: OrderFilter
+  ): Promise<Order>;
 
   /**
-   * Gets a Buy Order given a filter.
+   * Gets Buy Orders given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getBuyOrder(filter: OrderFilter): Promise<Order>;
+   public getBuyOrders(
+    filter: OrderFilter
+  ): Promise<Order>;
 
   /**
    * Search orders
    *
    * @param {SearchFilter} filter - Defines criteria to filter orders by.
    */
-  public searchOrders(filter: SearchFilter): Promise<Order>;
+   public searchOrders(filter: SearchFilter): Promise<Order>;
 }

@@ -41,10 +41,17 @@ export interface Allotment {
 }
 
 export interface OrderFilter {
+<<<<<<< HEAD
   origin: string;
   sort?: "LAST_UPDATE";
   size?: number;
   continuation?: string;
+=======
+    origin?: string,
+    sort?: 'LAST_UPDATE',
+    size?: number,
+    continuation?: string, 
+>>>>>>> main
 }
 
 export interface OrderCollectionFilter extends OrderFilter {
