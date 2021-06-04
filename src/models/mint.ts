@@ -145,8 +145,14 @@ export interface ItemsByCollection extends ItemsPagination {
 }
 
 export type ItemsBy =
-    | ItemById
     | ItemsPagination
     | ItemsByOwner
     | ItemsByCreator
     | ItemsByCollection;
+
+
+export interface ItemsList {
+  total: number,
+  continuation?: string,
+  items: LazyMintResponse[]
+}
