@@ -1,6 +1,9 @@
 import { Asset } from "./commons";
+import { BigNumberish } from "ethers";
+import { PartOwner } from "./mint";
 
 export interface Order {
+  type: "RARIBLE_V1" | "RARIBLE_V2";
   makerAddress: string;
   makeAsset: Asset;
   takerAddress: string;
@@ -16,29 +19,34 @@ export interface Order {
   /**
    * Order can't be matched after this block timestamp (optional)
    **/
-  endBlockTimestamp?: number
-  type: 'RARIBLE_V1' | 'RARIBLE_V2'
-  data?: SellData
-  fill?: number
-  makeStock?: number
-  cancelled?: boolean
-  createdAt?: string
-  lastUpdateAt?: string
-  signature?: string
-  hash?: string
+  endBlockTimestamp?: number;
+
+  data?: OrderData | string;
+
+  fill?: number;
+  makeStock?: number;
+  cancelled?: boolean;
+  createdAt?: string;
+  lastUpdateAt?: string;
+  signature?: string;
+  hash?: string;
 }
 
-export interface SellData {
-  dataType: "RARIBLE_V2_DATA_V1" | "LEGACY";
-  payouts?: Allotment[];
-  originFees?: Allotment[];
-  fee?: number;
+export interface OrderDataLegacy {
+  dataType: "LEGACY";
+  fee: BigNumberish;
 }
 
-export interface Allotment {
-  account: string;
-  value: number;
+export interface OrderDataV1 {
+  dataType: "RARIBLE_V2_DATA_V1";
+  /**
+   * Beneficiary Address.
+   */
+  beneficiary: string;
+  originFees: PartOwner[];
 }
+
+type OrderData = OrderDataLegacy | OrderDataV1;
 
 export interface OrderFilter {
   origin: string;
@@ -73,4 +81,3 @@ export interface SearchFilter extends OrderFilter {
   tokenId?: BigInteger;
   collection?: string;
 }
-

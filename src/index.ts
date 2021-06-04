@@ -1,33 +1,24 @@
-import Web3 from "web3";
-import Web3Core from "web3-core";
-import { BasicMintMetadata, MintData, MintMetadata } from "./models/mint";
+import {
+  LazyMintData,
+  LazyMintResponse,
+  MintData,
+  MintingMetadata,
+  MintMetadata,
+  TokenType,
+} from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
 import { Order, OrderFilter, SearchFilter } from "./models/orders";
+import { Signer } from "ethers";
 
 /**
  * Rarible SDK - Interface
  */
 export declare class RaribleSDK {
-  private provider: Web3Core.provider;
-  private web3: Web3;
+  private signer: Signer;
+  public readonly options: Configuration;
 
-  constructor(provider: Web3Core.provider, options: Configuration);
-
-  /**
-   * Buys an item or accepts a bid.
-   *
-   * @param {Order} buyOrder - Buying order.
-   * @param {string} buySignature - Buyer's signature.
-   * @param {Order} sellOrder - Selling order.
-   * @param {string} sellSignature - Sellers's signature (optional).
-   */
-  public acceptOrder(
-    buyOrder: Order,
-    buyerSignature: string,
-    sellOrder: Order,
-    sellerSignature?: string
-  ): Promise<MatchEvent>;
+  constructor(provider: Signer, options: Configuration);
 
   /**
    * Mint a new NFT.
@@ -57,10 +48,47 @@ export declare class RaribleSDK {
    *  @param {object[]} [data.royalties] - Array of royalties.
    * @param {object} metadata - Mint Metadata.
    */
-  public mint(
-    data: MintData,
-    metadata: BasicMintMetadata
-  ): Promise<MintMetadata>;
+  public mint(data: MintData, metadata: MintingMetadata): Promise<MintMetadata>;
+
+  /**
+   * Mint a new NFT.
+   * This will also upload the NFT to IPFS using Pinata.
+   *
+   * @param {object} data - Lazy Mint Data.
+   */
+  public lazyMint(data: LazyMintData): Promise<LazyMintResponse>;
+
+  /**
+   * Get Lazy Mint NFT information.
+   *
+   * @param {string} id - Lazy Mint Id.
+   */
+  public getLazyMint(id: LazyMintResponse["id"]): Promise<LazyMintData>;
+
+  /**
+   * Get the next available tokenId for minter.
+   *
+   * @param {string} tokenType - Token Type ERC721 or ERC1155.
+   * @param {string} minter - Token Minter.
+   * @returns {Promise<string>} - TokenId
+   * @private
+   */
+  private getTokenId(tokenType: TokenType, minter: string): Promise<string>;
+
+  /**
+   * Buys an item or accepts a bid.
+   *
+   * @param {Order} buyOrder - Buying order.
+   * @param {string} buyerSignature - Buyer's signature.
+   * @param {Order} sellOrder - Selling order.
+   * @param {string} sellerSignature - Sellers's signature (optional).
+   */
+  public acceptOrder(
+    buyOrder: Order,
+    buyerSignature: string,
+    sellOrder: Order,
+    sellerSignature?: string
+  ): Promise<MatchEvent>;
 
   /**
    * Gets an Order given an order's hash.
@@ -77,27 +105,40 @@ export declare class RaribleSDK {
   public createOrder(order: Order): Promise<Order>;
 
   /**
-   * Gets Sell Orders given a filter.
+   * Update a Sell Order.
+   * The price can only be lowered and not increased,
+   * to increase the price you will need to cancel the order and create a new one.
+   *
+   * @param {Order} sellOrder - sell order.
+   */
+  public updateOrder(sellOrder: Order): Promise<Order>;
+
+  /**
+   * Cancel a Sell Order.
+   * Canceling an order needs to be done on-chain.
+   *
+   * @param {Order} sellOrder - sell order.
+   */
+  public cancelOrder(sellOrder: Order): Promise<void>;
+
+  /**
+   * Gets a Sell Order given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getSellOrders(
-    filter: OrderFilter
-  ): Promise<Order>;
+  public getSellOrders(filter: OrderFilter): Promise<Order>;
 
   /**
    * Gets Buy Orders given a filter.
    *
    * @param {OrderFilter} filter - Defines criteria to filter orders by.
    */
-   public getBuyOrders(
-    filter: OrderFilter
-  ): Promise<Order>;
+  public getBuyOrder(filter: OrderFilter): Promise<Order>;
 
   /**
    * Search orders
    *
    * @param {SearchFilter} filter - Defines criteria to filter orders by.
    */
-   public searchOrders(filter: SearchFilter): Promise<Order>;
+  public searchOrders(filter: SearchFilter): Promise<Order>;
 }
