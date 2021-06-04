@@ -120,7 +120,7 @@ export interface MintMedia {
 }
 
 export interface MintMetadataResponse
-    extends Pick<MintingMetadata, "name" | "description" | "attributes"> {
+  extends Pick<MintingMetadata, "name" | "description" | "attributes"> {
   image: MintMedia;
   animation: MintMedia;
 }
@@ -145,14 +145,13 @@ export interface ItemsByCollection extends ItemsPagination {
 }
 
 export type ItemsBy =
-    | ItemsPagination
-    | ItemsByOwner
-    | ItemsByCreator
-    | ItemsByCollection;
-
+  | ItemsPagination
+  | ItemsByOwner
+  | ItemsByCreator
+  | ItemsByCollection;
 
 export interface ItemsList {
-  total: number,
-  continuation?: string,
-  items: LazyMintResponse[]
+  total: number;
+  continuation?: string;
+  items: LazyMintResponse[];
 }
