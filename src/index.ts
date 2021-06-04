@@ -5,6 +5,9 @@ import {
   MintingMetadata,
   MintMetadata,
   TokenType,
+  ItemById,
+  ItemsBy,
+  ItemsList
 } from "./models/mint";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
@@ -75,6 +78,22 @@ export declare class RaribleSDK {
    */
   private getTokenId(tokenType: TokenType, minter: string): Promise<string>;
 
+
+  /**
+   * Get an item.
+   *
+   * @param {ItemById} item - item is a unique string
+   */
+  public getItem(item: ItemById): Promise<LazyMintData>;
+  
+  /**
+   * Get the all items from the indexer or a filtered list/subset.
+   *
+   * @param {ItemsBy} [filter] - By Owner, Creator, or Collection
+   *
+   */
+  public getItems(filter?: ItemsBy): Promise<ItemsList>;
+
   /**
    * Buys an item or accepts a bid.
    *
@@ -83,6 +102,8 @@ export declare class RaribleSDK {
    * @param {Order} sellOrder - Selling order.
    * @param {string} sellerSignature - Sellers's signature (optional).
    */
+  
+    
   public acceptOrder(
     buyOrder: Order,
     buyerSignature: string,

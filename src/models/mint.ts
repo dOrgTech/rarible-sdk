@@ -101,3 +101,57 @@ export interface MintingMetadata
   image: Blob;
   animation: Blob;
 }
+
+export interface MintMedia {
+  url: {
+    ORIGINAL: string;
+    PREVIEW: string;
+  };
+  meta: {
+    ORIGINAL: {
+      /**
+       * MIME Media type (Ex: image/png)
+       */
+      type: string;
+      width: number;
+      height: number;
+    };
+  };
+}
+
+export interface MintMetadataResponse
+  extends Pick<MintingMetadata, "name" | "description" | "attributes"> {
+  image: MintMedia;
+  animation: MintMedia;
+}
+
+export interface ItemById extends Pick<LazyMintResponse, "id"> {}
+
+export interface ItemsPagination {
+  continuation?: string;
+  size?: number;
+}
+
+export interface ItemsByOwner extends ItemsPagination {
+  owner: string;
+}
+
+export interface ItemsByCreator extends ItemsPagination {
+  creator: string;
+}
+
+export interface ItemsByCollection extends ItemsPagination {
+  creator: string;
+}
+
+export type ItemsBy =
+  | ItemsPagination
+  | ItemsByOwner
+  | ItemsByCreator
+  | ItemsByCollection;
+
+export interface ItemsList {
+  total: number;
+  continuation?: string;
+  items: LazyMintResponse[];
+}
