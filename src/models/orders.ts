@@ -1,12 +1,12 @@
-import { Asset } from "./commons";
 import { BigNumberish } from "ethers";
 import { PartOwner } from "./mint";
+import {Item} from "./items";
 
 export interface Order {
   type: "RARIBLE_V1" | "RARIBLE_V2";
   makerAddress: string;
   makeAsset: Asset;
-  takerAddress: string;
+  takerAddress?: string;
   takeAsset: Asset;
   /**
    * Random number to distinguish between a maker's orders
@@ -32,6 +32,36 @@ export interface Order {
   hash?: string;
 }
 
+export interface CreateOrder {
+  /**
+   * Default to signer address.
+   */
+  maker?: string;
+  item: Item;
+  data?: OrderData;
+  amount: BigNumberish;
+  /**
+   * If not specify, the default value is ETH
+   */
+  amountType?: ETHAssetType | TokenAssetType;
+}
+
+export interface ETHAssetType {
+  assetClass: 'ETH'
+}
+
+export interface TokenAssetType {
+  assetClass: 'ERC20' | 'ERC721' | 'ERC1155'
+
+  contract: string;
+  tokenId: string;
+}
+
+export interface Asset {
+  value: BigNumberish;
+  assetType: ETHAssetType | TokenAssetType;
+}
+
 export interface OrderDataLegacy {
   dataType: "LEGACY";
   fee: BigNumberish;
@@ -39,9 +69,6 @@ export interface OrderDataLegacy {
 
 export interface OrderDataV1 {
   dataType: "RARIBLE_V2_DATA_V1";
-  /**
-   * Beneficiary Address.
-   */
   beneficiary: string;
   originFees: PartOwner[];
 }
