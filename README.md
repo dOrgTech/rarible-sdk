@@ -1,14 +1,18 @@
 # Rarible Protocol's JavaScript SDK Interface
 ### An easy-to-use interface that allows LazyMint, Buying, Selling, Bidding and relevant methods from the [Protocol Flow](https://docs.rarible.com/#protocol-flow). 
-Rarible Protocol  Interface
 
-> Disclaimer: This is still a Work in progress, and no logic has yet been developed for the SDK. This interface will serve as a cornerstone to integrate with the functions relevant to end users / developers of the Rarible ecosystem. 
+---
+*Disclaimer:*
+> This SDK is still a `Work In Progress`, and no logic has yet been developed for the SDK. This interface will serve as a cornerstone to integrate with the functions relevant to end users / developers of the Rarible ecosystem. 
+> 
+> This project was initially funded [through a grant by the Rarible DAO to dOrg DAO in Q2 2021](https://gov.rarible.com/t/proposal-design-a-js-sdk-for-rarible-protocol/11367).
+---
 
 ## Overview
 
-With `RaribleSDK`, you can mint, buy, sell, and bid on NFTs on Ethereum (ERC-721 and ERC-1155) by accessing the most versatile functions of the Rarible Protocol. This allows developers like you to quickly iterate and build solutions for their specific use cases.
+With `RaribleSDK`, you can mint, buy, sell, and bid on NFTs on Ethereum (ERC-721 and ERC-1155) by accessing the most versatile functions of the Rarible Protocol. This allows developers like you to quickly iterate and build solutions for your specific use cases.
 
-This interface aims to cover the entire [Protocol Flow](https://docs.rarible.com/#protocol-flow). 
+This interface aims to cover the entire [Protocol Flow](https://docs.rarible.com/#protocol-flow) for the Rarible Exchage V2:
 
 1. Creating ERC721/1155 Asset Metadata and Calling the Mint function
 2. Asset Discovery
@@ -51,25 +55,30 @@ const order = rarible.createOrder({
 
 The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTech/rarible-sdk/blob/main/src/index.ts), here you can find the following methods:
 
-`mint(data)` -- Creates ERC721/1155 asset metadata and tokenID, uploads metadata IPFS, calls contract min function.
+#### Mint Assets (LazyMint)
 
-`sign(data)` -- Utility function for signing multi-creator ERC721/1155 assets.
+- `mint(data)` -- Creates ERC721/1155 asset metadata and tokenID, uploads metadata IPFS, calls contract min function.
 
-`getItem(id)` -- Retrieve single minted item by ID.
+- `sign(data)` -- Utility function for signing multi-creator ERC721/1155 assets.
 
-`getItems(filter)` -- Retrieve multiple items by filter.
+#### Discover Assets (Idnex)
 
-`acceptOrder(buyOrder, sellOrder)` -- Matches order to bid, executes transaction.
+- `getItem(id)` -- Retrieve single minted item by ID.
 
-`getOrder(hash)` -- Retrieve single order by hash.
+- `getItems(filter)` -- Retrieve multiple items by filter.
 
-`getOrders(filter)` -- Retrieve multiple orders by filter.
+#### Buy, Sell and Bids (Exchange)
+- `createOrder(order)` -- Create a bid or sell order.
 
-`createOrder(order)` -- Create a bid or sell order.
+- `getOrder(hash)` -- Retrieve single order by hash.
 
-`updateOrder(order)` -- Update an order.
+- `getOrders(filter)` -- Retrieve multiple orders by filter.
 
-`cancelOrder(order)` -- Cancel an order.
+- `acceptOrder(buyOrder, sellOrder)` -- Matches order to bid, executes transaction.
+
+- `updateOrder(order)` -- Update an order.
+
+- `cancelOrder(order)` -- Cancel an order.
 
 ### Documentation
 Read more about the Docs Here
