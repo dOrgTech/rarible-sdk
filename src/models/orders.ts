@@ -1,6 +1,12 @@
 import { Asset } from "./commons";
 import { BigNumberish } from "ethers";
-import { PartOwner } from "./mint";
+import { PartOwner } from "./items";
+
+/*
+ *
+ * Order creation.
+ *
+ */
 
 export interface Order {
   type: "RARIBLE_V1" | "RARIBLE_V2";
@@ -8,21 +14,9 @@ export interface Order {
   makeAsset: Asset;
   takerAddress: string;
   takeAsset: Asset;
-  /**
-   * Random number to distinguish between a maker's orders
-   **/
-  salt: number;
-  /**
-   * Order can't be matched before this block timestamp (optional)
-   **/
   startBlockTimestamp?: number;
-  /**
-   * Order can't be matched after this block timestamp (optional)
-   **/
   endBlockTimestamp?: number;
-
   data?: OrderData | string;
-
   fill?: number;
   makeStock?: number;
   cancelled?: boolean;
@@ -39,45 +33,72 @@ export interface OrderDataLegacy {
 
 export interface OrderDataV1 {
   dataType: "RARIBLE_V2_DATA_V1";
-  /**
-   * Beneficiary Address.
-   */
   beneficiary: string;
   originFees: PartOwner[];
 }
 
 type OrderData = OrderDataLegacy | OrderDataV1;
 
-export interface OrderFilter {
+/*
+ *
+ * Order filters for searching
+ *
+ */
+
+export interface BaseOrderFilter {
   origin: string;
   sort?: "LAST_UPDATE";
   size?: number;
   continuation?: string;
 }
 
-export interface OrderCollectionFilter extends OrderFilter {
+export interface OrderCollectionFilter extends BaseOrderFilter {
   collectionAddress: string;
 }
 
-export interface OrderMakerFilter extends OrderFilter {
+export interface OrderMakerFilter extends BaseOrderFilter {
   makerAddress: string;
 }
 
-export interface OrderItemFilter extends OrderFilter {
+export interface OrderItemFilter extends BaseOrderFilter {
   contractAddress: string;
   tokenId: BigInteger;
 }
 
-export interface SearchFilter extends OrderFilter {
-  type:
-    | "sell"
-    | "sell_by_maker"
-    | "sell_by_item"
-    | "sell_by_collection"
-    | "bid_by_item"
-    | "bid_by_maker";
-  maker?: string;
-  token?: string;
-  tokenId?: BigInteger;
-  collection?: string;
+export interface Sell extends BaseOrderFilter {
+  type: "sell";
+}
+
+export interface SellByMaker extends OrderMakerFilter {
+  type: "sell_by_maker";
+}
+
+export interface SellByItem extends OrderItemFilter {
+  type: "sell_by_item";
+}
+
+export interface SellByCollection extends OrderCollectionFilter {
+  type: "sell_by_collection";
+}
+
+export interface BidByItem extends OrderItemFilter {
+  type: "bid_by_item";
+}
+
+export interface BidByMaker extends OrderMakerFilter {
+  type: "bid_by_maker";
+}
+
+export type OrderFilter =
+  | Sell
+  | SellByMaker
+  | SellByItem
+  | SellByItem
+  | BidByItem
+  | BidByMaker;
+
+export interface OrderList {
+  total: number;
+  continuation?: string;
+  items: Order[];
 }

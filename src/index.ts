@@ -1,115 +1,55 @@
-import {
-  LazyMintData,
-  LazyMintResponse,
-  MintData,
-  MintingMetadata,
-  MintMetadata,
-  TokenType,
-  ItemById,
-  ItemsBy,
-  ItemsList
-} from "./models/mint";
+import { MintData } from "./models/mint";
+import { Item, ItemList, ItemById, ItemsBy } from "./models/items";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
-import { Order, OrderFilter, SearchFilter } from "./models/orders";
+import { Order, OrderFilter } from "./models/orders";
 import { Signer } from "ethers";
 
 /**
  * Rarible SDK - Interface
  */
+
 export declare class RaribleSDK {
   private signer: Signer;
   public readonly options: Configuration;
-
   constructor(provider: Signer, options: Configuration);
 
   /**
    * Mint a new NFT.
-   * This will required that your NFT is already hosted in IPFS.
-   *
    * @param {object} data - Mint Data.
-   *  @param {string} data.to - Address to transfer the NFT.
-   *  @param {object} data.data - NFT Metadata.
-   *  @param {object} data.uri - NFT URI.
-   *  @param {number} [data.supply] - Supply amount (only for ERC-1155 tokens).
-   *  @param {object[]} [data.creators] - Array of creators.
-   *  @param {object[]} [data.royalties] - Array of royalties.
-   * @param {object} metadata - Mint Metadata.
    */
-  public mint(data: MintData, metadata: MintMetadata): Promise<MintMetadata>;
+  public mint(data: MintData): Promise<Item>;
 
   /**
-   * Mint a new NFT.
-   * This will also upload the NFT to IPFS using Pinata.
-   *
+   * Sign minting order (for multi-creator NFTs).
    * @param {object} data - Mint Data.
-   *  @param {string} data.to - Address to transfer the NFT.
-   *  @param {object} data.data - NFT Metadata.
-   *  @param {object} data.uri - NFT URI.
-   *  @param {number} [data.supply] - Supply amount (only for ERC-1155 tokens).
-   *  @param {object[]} [data.creators] - Array of creators.
-   *  @param {object[]} [data.royalties] - Array of royalties.
-   * @param {object} metadata - Mint Metadata.
    */
-  public mint(data: MintData, metadata: MintingMetadata): Promise<MintMetadata>;
+
+  public sign(data: MintData): string;
 
   /**
-   * Mint a new NFT.
-   * This will also upload the NFT to IPFS using Pinata.
+   * Get an item by its id.
    *
-   * @param {object} data - Lazy Mint Data.
+   * @param {ItemById} id - id is a unique string
    */
-  public lazyMint(data: LazyMintData): Promise<LazyMintResponse>;
+  public getItem(id: ItemById): Promise<Item>;
 
   /**
-   * Get Lazy Mint NFT information.
+   * Gets items by filter.
    *
-   * @param {string} id - Lazy Mint Id.
-   */
-  public getLazyMint(id: LazyMintResponse["id"]): Promise<LazyMintData>;
-
-  /**
-   * Get the next available tokenId for minter.
-   *
-   * @param {string} tokenType - Token Type ERC721 or ERC1155.
-   * @param {string} minter - Token Minter.
-   * @returns {Promise<string>} - TokenId
-   * @private
-   */
-  private getTokenId(tokenType: TokenType, minter: string): Promise<string>;
-
-
-  /**
-   * Get an item.
-   *
-   * @param {ItemById} item - item is a unique string
-   */
-  public getItem(item: ItemById): Promise<LazyMintData>;
-  
-  /**
-   * Get the all items from the indexer or a filtered list/subset.
-   *
-   * @param {ItemsBy} [filter] - By Owner, Creator, or Collection
+   * @param {ItemsBy} filter - By Owner, Creator, or Collection
    *
    */
-  public getItems(filter?: ItemsBy): Promise<ItemsList>;
+  public getItems(filter: ItemsBy): Promise<Item[]>;
 
   /**
-   * Buys an item or accepts a bid.
+   * Matches order to bid, executes transaction.
    *
    * @param {Order} buyOrder - Buying order.
-   * @param {string} buyerSignature - Buyer's signature.
    * @param {Order} sellOrder - Selling order.
-   * @param {string} sellerSignature - Sellers's signature (optional).
    */
-  
-    
-  public acceptOrder(
-    buyOrder: Order,
-    buyerSignature: string,
-    sellOrder: Order,
-    sellerSignature?: string
-  ): Promise<MatchEvent>;
+
+  public acceptOrder(buyOrder: Order, sellOrder: Order): Promise<MatchEvent>;
 
   /**
    * Gets an Order given an order's hash.
@@ -119,47 +59,31 @@ export declare class RaribleSDK {
   public getOrder(hash: string): Promise<Order>;
 
   /**
-   * Creates a Sell Order.
+   * Gets a list of Orders given a filter.
    *
-   * @param {Order} order - Creates sell order.
+   * @param {OrderFilter} filter - Defines criteria to filter orders by.
+   */
+  public getOrders(filter: OrderFilter): Promise<OrderList>;
+
+  /**
+   * Creates an Order.
+   *
+   * @param {Order} order - Creates order.
    */
   public createOrder(order: Order): Promise<Order>;
 
   /**
-   * Update a Sell Order.
-   * The price can only be lowered and not increased,
-   * to increase the price you will need to cancel the order and create a new one.
+   * Update an order.
    *
-   * @param {Order} sellOrder - sell order.
+   * @param {Order} order - order.
    */
-  public updateOrder(sellOrder: Order): Promise<Order>;
+  public updateOrder(order: Order): Promise<Order>;
 
   /**
-   * Cancel a Sell Order.
+   * Cancel an order.
    * Canceling an order needs to be done on-chain.
    *
-   * @param {Order} sellOrder - sell order.
+   * @param {Order} order - order.
    */
-  public cancelOrder(sellOrder: Order): Promise<void>;
-
-  /**
-   * Gets a Sell Order given a filter.
-   *
-   * @param {OrderFilter} filter - Defines criteria to filter orders by.
-   */
-  public getSellOrders(filter: OrderFilter): Promise<Order>;
-
-  /**
-   * Gets Buy Orders given a filter.
-   *
-   * @param {OrderFilter} filter - Defines criteria to filter orders by.
-   */
-  public getBuyOrder(filter: OrderFilter): Promise<Order>;
-
-  /**
-   * Search orders
-   *
-   * @param {SearchFilter} filter - Defines criteria to filter orders by.
-   */
-  public searchOrders(filter: SearchFilter): Promise<Order>;
+  public cancelOrder(order: Order): Promise<Order>;
 }

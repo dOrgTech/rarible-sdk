@@ -1,85 +1,38 @@
 import { BigNumberish } from "ethers";
 import { ItemTransfer } from "./transfers";
+import { PartOwner } from "./items";
 
-export type TokenType = "ERC721" | "ERC1155";
+export interface MintData {
+  /**
+   *
+   *  This is the bare minimum info needed to create an NFT. The SDK should handle assigning
+   *  tokenID, pushing metadata to IPFS, etc.
+   *
+   **/
 
-export interface PartOwner {
-  address: string; // Address of the Owner
-  value: BigNumberish; // Percentage of the Owner with 2 decimals. Ex: 10000 -> 100%, 9705 -> 97.05%
-}
+  // Defaults to signer address if single creator and `to` not speficied
+  to?: string;
 
-export interface ERC721MintData {
-  /**
-   * Address to transfer the NFT after minting,
-   * And this address will be considered as the Owner.
-   */
-  to: string;
-  /**
-   * This is the suffix for the tokenURI, typically our prefix would be "ipfs://".
-   */
-  uri: string;
-  /**
-   * creators is supplied as an array of Owner, this array should contain all
-   * the addresses (with their respective part of the creation - in basis points)
-   * who are considered the authors/creators of this token.
-   * The address array is public and can be queried by anyone.
-   * Sum of fields value in this array should be 10000 (100% in basis points)
-   */
-  creators: PartOwner[];
-  /**
-   * royalties are an array of addresses and values.
-   * The fees array is public and can be queried by anyone.
-   * Values are specified in basis points. So for example, 200 means 2%
-   */
+  // Defaults to [signer] if not specified.
+  creators?: PartOwner[];
+
+  // Signatures will be required for multi-creator NFTs.
+  // Defaults to [] if not specified.
+  signatures?: Signature[];
+
+  // Defaults to [] if not specified.
   royalties: PartOwner[];
-  /**
-   * Signatures is an array of wallet signatures for this transaction from every creator,
-   * the only exception to this is when the creator sends the mint transaction - then empty signature
-   * can be passed for the executing transaction creator.
-   */
-  signatures: string[];
+
+  // Contract type (ERC721 vs 1155) is inferred by presence of supply field with value > 1.
+  // Defaults to 1.
+  supply?: BigNumberish;
+
+  // Required metadata.
+  metadata: MintMetadata;
 }
 
-export interface ERC1155MintData extends ERC721MintData {
-  /**
-   * supply should be supplied as an uint256, this is the number of copies (Editions)
-   * of this token that exist. (Maximum value is 2**256 - 1).
-   */
-  supply: BigNumberish;
-}
-
-export type MintData = ERC721MintData | ERC1155MintData;
-
-export interface ERC721LazyMint extends Omit<ERC721MintData, "to"> {
-  /**
-   * NFT as ERC-721 Non-Fungible Token Standard.
-   */
-  "@type": "ERC721";
-
-  contract: string;
-}
-
-export interface ERC1155LazyMint extends Omit<ERC1155MintData, "to"> {
-  /**
-   * NFT as ERC-1155 Multi Token Standard.
-   */
-  "@type": "ERC1155";
-
-  contract: string;
-}
-
-export type LazyMintData = ERC721LazyMint | ERC1155LazyMint;
-
-export interface LazyMintResponse {
-  id: string;
-  contract: string;
-  tokenId: string;
-  creator?: string;
-  supply: number;
-  lazySupply: number;
-  owners: string[];
-  royalties: PartOwner[];
-  pending: ItemTransfer[];
+export interface Signature {
+  signature: string;
 }
 
 export interface MintMetadata {
@@ -94,64 +47,4 @@ export interface MintMetadata {
     trait_type: string;
     value: string;
   }[];
-}
-
-export interface MintingMetadata
-  extends Pick<MintMetadata, "name" | "description" | "attributes"> {
-  image: Blob;
-  animation: Blob;
-}
-
-export interface MintMedia {
-  url: {
-    ORIGINAL: string;
-    PREVIEW: string;
-  };
-  meta: {
-    ORIGINAL: {
-      /**
-       * MIME Media type (Ex: image/png)
-       */
-      type: string;
-      width: number;
-      height: number;
-    };
-  };
-}
-
-export interface MintMetadataResponse
-  extends Pick<MintingMetadata, "name" | "description" | "attributes"> {
-  image: MintMedia;
-  animation: MintMedia;
-}
-
-export interface ItemById extends Pick<LazyMintResponse, "id"> {}
-
-export interface ItemsPagination {
-  continuation?: string;
-  size?: number;
-}
-
-export interface ItemsByOwner extends ItemsPagination {
-  owner: string;
-}
-
-export interface ItemsByCreator extends ItemsPagination {
-  creator: string;
-}
-
-export interface ItemsByCollection extends ItemsPagination {
-  creator: string;
-}
-
-export type ItemsBy =
-  | ItemsPagination
-  | ItemsByOwner
-  | ItemsByCreator
-  | ItemsByCollection;
-
-export interface ItemsList {
-  total: number;
-  continuation?: string;
-  items: LazyMintResponse[];
 }
