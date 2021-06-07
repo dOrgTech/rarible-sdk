@@ -1,8 +1,8 @@
 import { MintData } from "./models/mint";
-import { Item, ItemList, ItemById, ItemsBy } from "./models/items";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
-import { Order, OrderList, OrderFilter } from "./models/orders";
+import { Item, ItemList, ItemById, ItemFilter } from "./models/items";
+import { Order, OrderList, OrderByHash, OrderFilter } from "./models/orders";
 import { Signer } from "ethers";
 
 /**
@@ -37,10 +37,10 @@ export declare class RaribleSDK {
   /**
    * Gets items by filter.
    *
-   * @param {ItemsBy} filter - By Owner, Creator, or Collection
+   * @param {ItemFilter} filter - By Owner, Creator, or Collection
    *
    */
-  public getItems(filter: ItemsBy): Promise<ItemList>;
+  public getItems(filter: ItemFilter): Promise<ItemList>;
 
   /**
    * Matches order to bid, executes transaction.
@@ -56,7 +56,7 @@ export declare class RaribleSDK {
    *
    * @param {string} hash - Hash of the order.
    */
-  public getOrder(hash: string): Promise<Order>;
+  public getOrder(hash: OrderByHash): Promise<Order>;
 
   /**
    * Gets a list of Orders given a filter.
@@ -73,14 +73,14 @@ export declare class RaribleSDK {
   public createOrder(order: Order): Promise<Order>;
 
   /**
-   * Update an order.
+   * Updates an order.
    *
    * @param {Order} order - order.
    */
   public updateOrder(order: Order): Promise<Order>;
 
   /**
-   * Cancel an order.
+   * Cancels an order.
    * Canceling an order needs to be done on-chain.
    *
    * @param {Order} order - order.

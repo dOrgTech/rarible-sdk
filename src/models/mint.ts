@@ -1,6 +1,5 @@
 import { BigNumberish } from "ethers";
 import { ItemTransfer } from "./transfers";
-import { PartOwner } from "./items";
 
 export interface MintData {
   /**
@@ -47,4 +46,9 @@ export interface MintMetadata {
     trait_type: string;
     value: string;
   }[];
+}
+
+export interface PartOwner {
+  address: string; // Address of the Owner
+  value: BigNumberish; // Percentage of the Owner with 2 decimals. Ex: 10000 -> 100%, 9705 -> 97.05%
 }

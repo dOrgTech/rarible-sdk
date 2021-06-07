@@ -1,6 +1,6 @@
 import { Asset } from "./commons";
 import { BigNumberish } from "ethers";
-import { PartOwner } from "./items";
+import { PartOwner } from "./mint";
 
 /*
  *
@@ -42,8 +42,11 @@ type OrderData = OrderDataLegacy | OrderDataV1;
 /*
  *
  * Order filters for searching
+ * https://docs.rarible.com/exchange/order-discovery
  *
  */
+
+export interface OrderByHash extends Pick<Order, "hash"> {}
 
 export interface BaseOrderFilter {
   origin: string;

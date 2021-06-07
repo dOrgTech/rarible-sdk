@@ -2,11 +2,6 @@ import { BigNumberish } from "ethers";
 import { ItemTransfer } from "./transfers";
 import { MintData } from "./mint";
 
-export interface PartOwner {
-  address: string; // Address of the Owner
-  value: BigNumberish; // Percentage of the Owner with 2 decimals. Ex: 10000 -> 100%, 9705 -> 97.05%
-}
-
 export interface Item extends Omit<MintData, "metadata"> {
   tokenId: BigNumberish;
   tokenUri: string;
@@ -14,28 +9,24 @@ export interface Item extends Omit<MintData, "metadata"> {
 
 export interface ItemById extends Pick<Item, "tokenId"> {}
 
-export interface ItemsPagination {
+export interface BaseItemFilter {
   continuation?: string;
   size?: number;
 }
 
-export interface ItemsByOwner extends ItemsPagination {
+export interface ItemsByOwner extends BaseItemFilter {
   owner: string;
 }
 
-export interface ItemsByCreator extends ItemsPagination {
+export interface ItemsByCreator extends BaseItemFilter {
   creator: string;
 }
 
-export interface ItemsByCollection extends ItemsPagination {
+export interface ItemsByCollection extends BaseItemFilter {
   creator: string;
 }
 
-export type ItemsBy =
-  | ItemsPagination
-  | ItemsByOwner
-  | ItemsByCreator
-  | ItemsByCollection;
+export type ItemFilter = ItemsByOwner | ItemsByCreator | ItemsByCollection;
 
 export interface ItemList {
   total: number;
