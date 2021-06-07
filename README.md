@@ -61,7 +61,7 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 
 - `sign(data)` -- Utility function for signing multi-creator ERC721/1155 assets.
 
-#### Discover Assets (Idnex)
+#### Discover Assets (Index)
 
 - `getItem(id)` -- Retrieve single minted item by ID.
 
