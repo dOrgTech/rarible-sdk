@@ -8,12 +8,13 @@ export interface PartOwner {
   value: BigNumberish; // Percentage of the Owner with 2 decimals. Ex: 10000 -> 100%, 9705 -> 97.05%
 }
 
-export interface ERC721MintData {
+export interface ERC721Data {
   /**
-   * Address to transfer the NFT after minting,
-   * And this address will be considered as the Owner.
+   * tokenId is an uint256, this is a unique identifying number for the token.
+   * The tokenId typically is made up of two sections, the first 20 bytes in the users' address
+   * and the next 12 bytes can be any random number.
    */
-  to: string;
+  tokenId: string;
   /**
    * This is the suffix for the tokenURI, typically our prefix would be "ipfs://".
    */
@@ -40,7 +41,7 @@ export interface ERC721MintData {
   signatures: string[];
 }
 
-export interface ERC1155MintData extends ERC721MintData {
+export interface ERC1155Data extends ERC721Data {
   /**
    * supply should be supplied as an uint256, this is the number of copies (Editions)
    * of this token that exist. (Maximum value is 2**256 - 1).
@@ -48,9 +49,9 @@ export interface ERC1155MintData extends ERC721MintData {
   supply: BigNumberish;
 }
 
-export type MintData = ERC721MintData | ERC1155MintData;
+export type NFTData = ERC721Data | ERC1155Data;
 
-export interface ERC721LazyMint extends Omit<ERC721MintData, "to"> {
+export interface ERC721LazyMint extends ERC721Data {
   /**
    * NFT as ERC-721 Non-Fungible Token Standard.
    */
@@ -59,7 +60,7 @@ export interface ERC721LazyMint extends Omit<ERC721MintData, "to"> {
   contract: string;
 }
 
-export interface ERC1155LazyMint extends Omit<ERC1155MintData, "to"> {
+export interface ERC1155LazyMint extends ERC1155Data {
   /**
    * NFT as ERC-1155 Multi Token Standard.
    */
@@ -70,19 +71,41 @@ export interface ERC1155LazyMint extends Omit<ERC1155MintData, "to"> {
 
 export type LazyMintData = ERC721LazyMint | ERC1155LazyMint;
 
-export interface LazyMintResponse {
-  id: string;
-  contract: string;
-  tokenId: string;
-  creator?: string;
-  supply: number;
-  lazySupply: number;
-  owners: string[];
-  royalties: PartOwner[];
-  pending: ItemTransfer[];
+export interface MintData extends Omit<NFTData, "tokenId"> {
+  /**
+   * Address to transfer the NFT after minting,
+   * And this address will be considered as the Owner.
+   * The TokenId will the generated based on this address.
+   */
+  to: string;
+
+  /**
+   * You can create NFT by uploading image to IPFS
+   */
+  metadata: NFTMetadata;
 }
 
-export interface MintMetadata {
+/**
+ * You can mint your NFT by letting our SDK
+ * handle the upload process using Pinata.
+ */
+export interface UploadAndMint extends Omit<NFTData, "tokenId" | "uri" | "royalties"> {
+  /**
+   * Default to signer's address
+   */
+  to?: string;
+  name: string;
+  description: string;
+  image: Blob;
+  /**
+   * Default to 100 (10%)
+   */
+  royalties: number | PartOwner[];
+  animation?: Blob;
+  attributes?: Record<string, string>;
+}
+
+export interface NFTMetadata {
   name: string;
   description: string;
   image: string;
@@ -94,64 +117,4 @@ export interface MintMetadata {
     trait_type: string;
     value: string;
   }[];
-}
-
-export interface MintingMetadata
-  extends Pick<MintMetadata, "name" | "description" | "attributes"> {
-  image: Blob;
-  animation: Blob;
-}
-
-export interface MintMedia {
-  url: {
-    ORIGINAL: string;
-    PREVIEW: string;
-  };
-  meta: {
-    ORIGINAL: {
-      /**
-       * MIME Media type (Ex: image/png)
-       */
-      type: string;
-      width: number;
-      height: number;
-    };
-  };
-}
-
-export interface MintMetadataResponse
-  extends Pick<MintingMetadata, "name" | "description" | "attributes"> {
-  image: MintMedia;
-  animation: MintMedia;
-}
-
-export interface ItemById extends Pick<LazyMintResponse, "id"> {}
-
-export interface ItemsPagination {
-  continuation?: string;
-  size?: number;
-}
-
-export interface ItemsByOwner extends ItemsPagination {
-  owner: string;
-}
-
-export interface ItemsByCreator extends ItemsPagination {
-  creator: string;
-}
-
-export interface ItemsByCollection extends ItemsPagination {
-  creator: string;
-}
-
-export type ItemsBy =
-  | ItemsPagination
-  | ItemsByOwner
-  | ItemsByCreator
-  | ItemsByCollection;
-
-export interface ItemsList {
-  total: number;
-  continuation?: string;
-  items: LazyMintResponse[];
 }
