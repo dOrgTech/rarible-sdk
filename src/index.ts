@@ -2,7 +2,7 @@ import { MintData } from "./models/mint";
 import { Item, ItemList, ItemById, ItemsBy } from "./models/items";
 import { Configuration } from "./models/commons";
 import { MatchEvent } from "./models/events";
-import { Order, OrderFilter } from "./models/orders";
+import { Order, OrderList, OrderFilter } from "./models/orders";
 import { Signer } from "ethers";
 
 /**
@@ -40,7 +40,7 @@ export declare class RaribleSDK {
    * @param {ItemsBy} filter - By Owner, Creator, or Collection
    *
    */
-  public getItems(filter: ItemsBy): Promise<Item[]>;
+  public getItems(filter: ItemsBy): Promise<ItemList>;
 
   /**
    * Matches order to bid, executes transaction.
