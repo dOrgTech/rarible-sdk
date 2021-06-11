@@ -58,15 +58,16 @@ console.log(order); // {..., hash: "abc123"}
 
 // Update that sell order to do a "flash sale":
 //  - Lower price from 1.75 ETH to 1.5 ETH
-await rarible.updateOrder({
-    hash: "abc123",
+order = await rarible.updateOrder({
+    order: order
     amount: "1500000000000000000",
     endBlockTimestamp: 120324374
 });
 
+console.log(order); // {..., hash: "cde345"}
 ...
 
-const sellOrder = await rarible.getOrder("abc123");
+const sellOrder = await rarible.getOrder("cde345");
 
 // Create a buy order for "NFT #1 from SDK", giving 1.5 ETH.
 const buyOrder = await rarible.createBuyOrder(sellOrder);
@@ -84,6 +85,13 @@ const buyOrder = await rarible.getOrder("def456");
 
 // Call the ExchangeV2Core contract
 await rarible.matchOrders(buyOrder, sellOrder);
+```
+
+**Query items by an owner**
+```typescript
+const items = await rarible.getItems({
+    owner: 0xaddress12387
+})
 ```
 
 ## Methods
