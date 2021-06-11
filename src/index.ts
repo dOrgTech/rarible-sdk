@@ -5,8 +5,15 @@ import {
   UploadAndMint,
 } from "./models/mint";
 import { Configuration } from "./models/commons";
-import { MatchEvent } from "./models/events";
-import { CreateOrder, Order, OrderFilter, SearchFilter } from "./models/orders";
+import {
+  BaseOrderFilter,
+  BidsFilter,
+  CreateOrder,
+  MatchEvent,
+  Order,
+  OrderList,
+  OrdersFilter,
+} from "./models/orders";
 import { Signer } from "ethers";
 import { Item, ItemById, ItemsBy, ItemsList } from "./models/items";
 import { Provider } from "@ethersproject/abstract-provider";
@@ -19,12 +26,19 @@ export declare class RaribleSDK {
   private signer: Signer;
   public readonly options: Configuration;
 
-  constructor(provider: Provider, signer?: Signer, options?: Configuration);
+  /**
+   * Rarible SDK Constructor.
+   *
+   * @param {Provider} provider - Network Provider.
+   * @param {Signer} signer - Wallet Signer.
+   * @param {Configuration} config - SDK Config.
+   */
+  constructor(provider: Provider, signer?: Signer, config?: Configuration);
 
   /**
    * Mint a new NFT.
    *
-   * @param {object} data - Mint Data.
+   * @param {UploadAndMint | MintData} data - Mint Data.
    */
   public mint(data: UploadAndMint | MintData): Promise<Item>;
 
@@ -32,7 +46,7 @@ export declare class RaribleSDK {
    * Mint a new NFT.
    * This will also upload the NFT to IPFS using Pinata.
    *
-   * @param {object} data - Lazy Mint Data.
+   * @param {LazyMintData} data - Lazy Mint Data.
    */
   public lazyMint(data: LazyMintData): Promise<Item>;
 
@@ -46,7 +60,7 @@ export declare class RaribleSDK {
   /**
    * Get the next available tokenId for minter.
    *
-   * @param {string} tokenType - Token Type ERC721 or ERC1155.
+   * @param {TokenType} tokenType - Token Type ERC721 or ERC1155.
    * @param {string} minter - Token Minter.
    * @returns {Promise<string>} - TokenId
    * @private
@@ -55,7 +69,7 @@ export declare class RaribleSDK {
 
   /**
    * Sign minting order (for multi-creator NFTs).
-   * @param {object} data - Mint Data.
+   * @param {MintData} data - Mint Data.
    */
   public sign(data: MintData): string;
 
@@ -75,20 +89,11 @@ export declare class RaribleSDK {
   public getItems(filter?: ItemsBy): Promise<ItemsList>;
 
   /**
-   * Buys an item or accepts a bid.
+   * Sign order.
    *
-   * @param {Order} buyOrder - Buying order.
-   * @param {Order} sellOrder - Selling order.
+   * @param {object} order - Order Data.
    */
-
-  public acceptOrder(buyOrder: Order, sellOrder: Order): Promise<MatchEvent>;
-
-  /**
-   * Gets an Order given an order's hash.
-   *
-   * @param {string} hash - Hash of the order.
-   */
-  public getOrder(hash: string): Promise<Order>;
+  public signOrder(order: CreateOrder | Order): Promise<string>;
 
   /**
    * Creates a Sell Order.
@@ -115,23 +120,38 @@ export declare class RaribleSDK {
   public cancelOrder(sellOrder: Order): Promise<void>;
 
   /**
+   * Create a Buy Order
+   * @param {Order} buyOrder - Order to be bought.
+   */
+  public createBuyOrder(buyOrder: Order): Promise<Order>;
+
+  /**
+   * Buys an item or accepts a bid.
+   *
+   * @param {Order} buyOrder - Buying order.
+   * @param {Order} sellOrder - Selling order.
+   */
+
+  public matchOrders(buyOrder: Order, sellOrder: Order): Promise<MatchEvent>;
+
+  /**
+   * Gets an Order given an order's hash.
+   *
+   * @param {string} hash - Hash of the order.
+   */
+  public getOrder(hash: string): Promise<Order>;
+
+  /**
    * Gets a Sell Order given a filter.
    *
-   * @param {OrderFilter} filter - Defines criteria to filter orders by.
+   * @param {BaseOrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getSellOrders(filter: OrderFilter): Promise<Order>;
+  public getOrders(filter: OrdersFilter): Promise<OrderList>;
 
   /**
    * Gets Buy Orders given a filter.
    *
-   * @param {OrderFilter} filter - Defines criteria to filter orders by.
+   * @param {BaseOrderFilter} filter - Defines criteria to filter orders by.
    */
-  public getBuyOrder(filter: OrderFilter): Promise<Order>;
-
-  /**
-   * Search orders
-   *
-   * @param {SearchFilter} filter - Defines criteria to filter orders by.
-   */
-  public searchOrders(filter: SearchFilter): Promise<Order>;
+  public getBids(filter: BidsFilter): Promise<OrderList>;
 }
