@@ -13,6 +13,7 @@ import {
   Order,
   OrderList,
   OrdersFilter,
+  UpdateOrder,
 } from "./models/orders";
 import { Signer } from "ethers";
 import { Item, ItemById, ItemsBy, ItemsList } from "./models/items";
@@ -103,14 +104,13 @@ export declare class RaribleSDK {
   public createOrder(order: CreateOrder | Order): Promise<Order>;
 
   /**
-   * TODO: Can this function receive just a hash of an existing order, with new optional params that if provided are updated in the orderbook?
    * Update a Sell Order.
    * The price can only be lowered and not increased,
    * to increase the price you will need to cancel the order and create a new one.
    *
-  * @param {orderHash} orderHash - the hash of the order you want to update.
+   * @param {UpdateOrder} order - Order to be update.
    */
-  public updateOrder(hash: orderHash): Promise<Order>;
+  public updateOrder(order: UpdateOrder | Order): Promise<Order>;
 
   /**
    * Cancel a Sell Order.

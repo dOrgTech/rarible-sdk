@@ -70,6 +70,10 @@ export interface CreateOrder {
   signature?: string;
 }
 
+export interface UpdateOrder extends CreateOrder {
+  hash: string;
+}
+
 export interface Asset {
   value: BigNumberish;
   assetType: AssetType;
