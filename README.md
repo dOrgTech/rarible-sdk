@@ -51,6 +51,29 @@ const order = await rarible.createOrder({
 
 console.log(order); // {..., hash: "abc123"}
 
+
+// Update that sell order to do a "flash sale":
+//  - Lower price from 1.75 ETH to 1.5 ETH
+//  - Sell order will now expire in 24 hours
+
+order = await rarible.updateOrder({          
+    //**
+    //* Just passing an order hash will query fill in all necessary Order data
+    // **
+    hash: "abc123",  
+
+    //**
+    //* Additional parameters given to the method will be updated on the order. 
+    //* (This function needs a lot of error handling, no updating someone else's order, can only lower price, order is still unmatched, etc)
+    //** 
+    amount: "1500000000000000000",
+    endBlockTimestamp: 120324374
+
+})
+
+// The new order is returned with its new hash
+console.log(order); // {..., hash: "cde345"}  
+
 ...
 
 const sellOrder = await rarible.getOrder("abc123");
