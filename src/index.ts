@@ -13,6 +13,7 @@ import {
   Order,
   OrderList,
   OrdersFilter,
+  UpdateOrder,
 } from "./models/orders";
 import { Signer } from "ethers";
 import { Item, ItemById, ItemsBy, ItemsList } from "./models/items";
@@ -107,9 +108,9 @@ export declare class RaribleSDK {
    * The price can only be lowered and not increased,
    * to increase the price you will need to cancel the order and create a new one.
    *
-   * @param {Order} sellOrder - sell order.
+   * @param {UpdateOrder} order - Order to be update.
    */
-  public updateOrder(sellOrder: Order): Promise<Order>;
+  public updateOrder(order: UpdateOrder | Order): Promise<Order>;
 
   /**
    * Cancel a Sell Order.

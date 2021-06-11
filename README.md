@@ -1,11 +1,15 @@
 # Rarible Protocol's JavaScript SDK Interface
-### An easy-to-use interface that allows LazyMint, Buying, Selling, Bidding and relevant methods from the [Protocol Flow](https://docs.rarible.com/#protocol-flow). 
+
+### An easy-to-use interface that allows LazyMint, Buying, Selling, Bidding and relevant methods from the [Protocol Flow](https://docs.rarible.com/#protocol-flow).
 
 ---
-*Disclaimer:*
-> This SDK is still a `Work In Progress`, and no logic has yet been developed for the SDK. This interface will serve as a cornerstone to integrate with the functions relevant to end users / developers of the Rarible ecosystem. 
-> 
+
+_Disclaimer:_
+
+> This SDK is still a `Work In Progress`, and no logic has yet been developed for the SDK. This interface will serve as a cornerstone to integrate with the functions relevant to end users / developers of the Rarible ecosystem.
+>
 > This project was initially funded [through a grant by the Rarible DAO to dOrg DAO in Q2 2021](https://gov.rarible.com/t/proposal-design-a-js-sdk-for-rarible-protocol/11367).
+
 ---
 
 ## Overview
@@ -51,11 +55,20 @@ const order = await rarible.createOrder({
 
 console.log(order); // {..., hash: "abc123"}
 
+
+// Update that sell order to do a "flash sale":
+//  - Lower price from 1.75 ETH to 1.5 ETH
+await rarible.updateOrder({
+    hash: "abc123",
+    amount: "1500000000000000000",
+    endBlockTimestamp: 120324374
+});
+
 ...
 
 const sellOrder = await rarible.getOrder("abc123");
 
-// Create a buy order for "NFT #1 from SDK", giving 1.75 ETH.
+// Create a buy order for "NFT #1 from SDK", giving 1.5 ETH.
 const buyOrder = await rarible.createBuyOrder(sellOrder);
 
 console.log(buyOrder); // {..., hash: "def456"}
@@ -88,6 +101,7 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 - `getItems(filter)` -- Retrieve multiple items by filter.
 
 #### Buy, Sell and Bids (Exchange)
+
 - `createOrder(order)` -- Create a bid or sell order.
 
 - `getOrder(hash)` -- Retrieve single order by hash.
@@ -103,5 +117,7 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 - `sign(data)` -- Sign order structure with ERC-712.
 
 ### Documentation
+
 Read more about the Docs Here
+
 - https://docs.rarible.com/

@@ -55,6 +55,8 @@ export interface CreateOrder {
   item: Item;
   amount: BigNumberish;
   data?: OrderData;
+  startBlockTimestamp?: number;
+  endBlockTimestamp?: number;
   /**
    * Default to signer address.
    */
@@ -68,6 +70,10 @@ export interface CreateOrder {
    * if not specified, the signature will be created before creating the order.
    */
   signature?: string;
+}
+
+export interface UpdateOrder extends CreateOrder {
+  hash: string;
 }
 
 export interface Asset {
