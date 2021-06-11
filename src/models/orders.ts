@@ -55,6 +55,8 @@ export interface CreateOrder {
   item: Item;
   amount: BigNumberish;
   data?: OrderData;
+  startBlockTimestamp?: number;
+  endBlockTimestamp?: number;
   /**
    * Default to signer address.
    */
