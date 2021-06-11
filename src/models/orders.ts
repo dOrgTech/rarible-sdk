@@ -1,6 +1,6 @@
 import { BigNumberish } from "ethers";
 import { PartOwner } from "./mint";
-import {Item} from "./items";
+import { Item } from "./items";
 
 export interface Order {
   type: "RARIBLE_V1" | "RARIBLE_V2";
@@ -32,34 +32,47 @@ export interface Order {
   hash?: string;
 }
 
-export interface CreateOrder {
-  /**
-   * Default to signer address.
-   */
-  maker?: string;
-  item: Item;
-  data?: OrderData;
-  amount: BigNumberish;
-  /**
-   * If not specify, the default value is ETH
-   */
-  amountType?: ETHAssetType | TokenAssetType;
-}
-
 export interface ETHAssetType {
-  assetClass: 'ETH'
+  assetClass: "ETH";
 }
 
-export interface TokenAssetType {
-  assetClass: 'ERC20' | 'ERC721' | 'ERC1155'
+export interface ERC20TokenAssetType {
+  assetClass: "ERC721" | "ERC1155";
+
+  contract: string;
+}
+
+export interface NFTAssetType {
+  assetClass: "ERC721" | "ERC1155";
 
   contract: string;
   tokenId: string;
 }
 
+export type AssetType = ETHAssetType | ERC20TokenAssetType | NFTAssetType;
+
+export interface CreateOrder {
+  item: Item;
+  amount: BigNumberish;
+  data?: OrderData;
+  /**
+   * Default to signer address.
+   */
+  maker?: string;
+  /**
+   * If not specify, the default value is ETH
+   */
+  amountType?: AssetType;
+  /**
+   * Order Signature.
+   * if not specified, the signature will be created before creating the order.
+   */
+  signature?: string;
+}
+
 export interface Asset {
   value: BigNumberish;
-  assetType: ETHAssetType | TokenAssetType;
+  assetType: AssetType;
 }
 
 export interface OrderDataLegacy {
@@ -75,36 +88,46 @@ export interface OrderDataV1 {
 
 type OrderData = OrderDataLegacy | OrderDataV1;
 
-export interface OrderFilter {
-  origin: string;
+export interface OrderList {
+  orders: Order[];
+  continuation: string;
+}
+
+export interface BaseOrderFilter {
+  origin?: string;
   sort?: "LAST_UPDATE";
   size?: number;
   continuation?: string;
 }
 
-export interface OrderCollectionFilter extends OrderFilter {
-  collectionAddress: string;
-}
-
-export interface OrderMakerFilter extends OrderFilter {
+export interface OrderMakerFilter extends BaseOrderFilter {
   makerAddress: string;
 }
 
-export interface OrderItemFilter extends OrderFilter {
+export interface OrderItemFilter extends BaseOrderFilter {
   contractAddress: string;
-  tokenId: BigInteger;
+  tokenId: BigNumberish;
 }
 
-export interface SearchFilter extends OrderFilter {
-  type:
-    | "sell"
-    | "sell_by_maker"
-    | "sell_by_item"
-    | "sell_by_collection"
-    | "bid_by_item"
-    | "bid_by_maker";
-  maker?: string;
-  token?: string;
-  tokenId?: BigInteger;
-  collection?: string;
+export interface OrderCollectionFilter extends BaseOrderFilter {
+  collectionAddress: string;
+}
+
+export type OrdersFilter =
+  | BaseOrderFilter
+  | OrderMakerFilter
+  | OrderItemFilter
+  | OrderCollectionFilter;
+
+export type BidsFilter = OrderMakerFilter | OrderItemFilter;
+
+export interface MatchEvent {
+  leftAsset: AssetType;
+  leftMaker: string;
+  newLeftFill: number;
+  newRightFill: number;
+  number: string;
+  rightHash: string;
+  rightMaker: string;
+  rightAsset: AssetType;
 }

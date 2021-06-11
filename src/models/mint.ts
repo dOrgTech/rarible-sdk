@@ -98,9 +98,9 @@ export interface UploadAndMint extends Omit<NFTData, "tokenId" | "uri" | "royalt
   description: string;
   image: Blob;
   /**
-   * Default to 100 (10%)
+   * Default to 1000 (10%)
    */
-  royalties: number | PartOwner[];
+  royalties?: number | PartOwner[];
   animation?: Blob;
   attributes?: Record<string, string>;
 }

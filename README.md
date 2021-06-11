@@ -33,7 +33,7 @@ import { RaribleSDK } from "@rarible/sdk-js";
 
 ...
 
-const rarible = new RaribleSDK(provider, signer);
+const rarible = new RaribleSDK(provider, signer, { pinataCredentials });
 
 // Upload to IPFS, Mint and Transfer
 const uploadedImage: Blob = ...;
@@ -44,11 +44,33 @@ const item = await rarible.mint({
 });
 
 // Create a sell order for 1.75 ETH
-const order = rarible.createOrder({
+const order = await rarible.createOrder({
     item,
     amount: "1750000000000000000"
 });
 
+console.log(order); // {..., hash: "abc123"}
+
+...
+
+const sellOrder = await rarible.getOrder("abc123");
+
+// Create a buy order for "NFT #1 from SDK", giving 1.75 ETH.
+const buyOrder = await rarible.createBuyOrder(sellOrder);
+
+console.log(buyOrder); // {..., hash: "def456"}
+
+...
+
+// Seller accepts order
+
+const sellOrder = await rarible.getOrder("abc123");
+
+// Buyer signature is within the object
+const buyOrder = await rarible.getOrder("def456");
+
+// Call the ExchangeV2Core contract
+await rarible.matchOrders(buyOrder, sellOrder);
 ```
 
 ## Methods
@@ -63,8 +85,6 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 
 #### Discover Assets (Index)
 
-- `getItem(id)` -- Retrieve single minted item by ID.
-
 - `getItems(filter)` -- Retrieve multiple items by filter.
 
 #### Buy, Sell and Bids (Exchange)
@@ -74,11 +94,13 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 
 - `getOrders(filter)` -- Retrieve multiple orders by filter.
 
-- `acceptOrder(buyOrder, sellOrder)` -- Matches order to bid, executes transaction.
-
 - `updateOrder(order)` -- Update an order.
 
 - `cancelOrder(order)` -- Cancel an order.
+
+- `matchOrders(buyOrder, sellOrder)` -- Matches order to bid, executes transaction.
+
+- `sign(data)` -- Sign order structure with ERC-712.
 
 ### Documentation
 Read more about the Docs Here
