@@ -6,7 +6,7 @@
 
 _Disclaimer:_
 
-> This SDK is still a `Work In Progress`, and no logic has yet been developed for the SDK. This interface will serve as a cornerstone to integrate with the functions relevant to end users / developers of the Rarible ecosystem.
+> This is the first iteration of the SDK, and the project is still a `Work In Progress`; no logic has yet been developed for the SDK. This interface will serve as a cornerstone to integrate with the functions relevant to end users / developers of the Rarible ecosystem.
 >
 > This project was initially funded [through a grant by the Rarible DAO to dOrg DAO in Q2 2021](https://gov.rarible.com/t/proposal-design-a-js-sdk-for-rarible-protocol/11367).
 
@@ -25,6 +25,8 @@ This interface aims to cover the entire [Protocol Flow](https://docs.rarible.com
 5. Order Discovery
 6. Matching Order
 7. Updating/Canceling An Order
+
+
 
 ## Getting started
 
@@ -56,32 +58,28 @@ const order = await rarible.createOrder({
 console.log(order); // {..., hash: "abc123"}
 
 
-// Update that sell order to do a "flash sale":
-//  - Lower price from 1.75 ETH to 1.5 ETH
+//  Update sell order, and lower price from 1.75 ETH to 1.5 ETH
 order = await rarible.updateOrder({
     order: order
     amount: "1500000000000000000",
-    endBlockTimestamp: 120324374
 });
 
 console.log(order); // {..., hash: "cde345"}
 ...
 
-const sellOrder = await rarible.getOrder("cde345");
-
 // Create a buy order for "NFT #1 from SDK", giving 1.5 ETH.
+const sellOrder = await rarible.getOrder("cde345");
 const buyOrder = await rarible.createBuyOrder(sellOrder);
 
-console.log(buyOrder); // {..., hash: "def456"}
+console.log(buyOrder); // {..., hash: "efg567"}
 
 ...
 
 // Seller accepts order
-
-const sellOrder = await rarible.getOrder("abc123");
+const sellOrder = await rarible.getOrder("cde345");
 
 // Buyer signature is within the object
-const buyOrder = await rarible.getOrder("def456");
+const buyOrder = await rarible.getOrder("efg567");
 
 // Call the ExchangeV2Core contract
 await rarible.matchOrders(buyOrder, sellOrder);
@@ -90,7 +88,7 @@ await rarible.matchOrders(buyOrder, sellOrder);
 **Query items by an owner**
 ```typescript
 const items = await rarible.getItems({
-    owner: 0xaddress12387
+    owner: "0xADdrEss1337"
 })
 ```
 
@@ -124,8 +122,11 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 
 - `sign(data)` -- Sign order structure with ERC-712.
 
-### Documentation
+### Modules
 
-Read more about the Docs Here
+Aside from these high-level functions, the [`/src/models`](https://github.com/dOrgTech/rarible-sdk/blob/main/src/models) directory holds several types and constructs that are lower-order and more allow atomized actions. 
 
+### Resources
+
+Read more about the Rarible Protocol Docs Here
 - https://docs.rarible.com/
