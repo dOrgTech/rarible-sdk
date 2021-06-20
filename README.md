@@ -116,8 +116,35 @@ The main interface can be found at [`./src/index.ts`](https://github.com/dOrgTec
 
 - `sign(data)` -- Sign order structure with ERC-712.
 
-### Documentation
+## Tentative Roadmap
+
+### Phase I: Interface - (DONE)
+1. Create Rarible SDK interface : [link](https://github.com/dOrgTech/rarible-sdk)
+
+> The next phases listed are only a suggestion and are orientative in nature. Actual execution of the project might require modifying the content, and order of the tasks. 
+>
+> The process below have been set up with the intent of reducing risk and increasing the speed of iterations, by setting up a develpment environment early on, and implementing a versatile and simple functionality currently present in the protocol flow. 
+> 
+> In order to land on a more accurate estimation of the hours required to actually develop these, we could begin talks for a continuing the engagement, and by drafting a new `Statement of Work` document to specify detailed deliverables and budget.
+
+
+### Phase II: Dev Environment - (~3wks @ 45hrs/wk)
+1. Fix any minor details that would have arised since the end of the iteration. (please [consider this review](https://hackmd.io/Utz5cpVFQe2OC5MX17uuFw?view))
+2. Implement Indexer functionality: `getItem()`
+3. Set up dev environment, and if necessary dockerize, deploy to `npm`, etc.
+4. Add minimalistic documentation for the dev environment.
+
+### Phase III: Endpoints (~5wks @ 45hrs/wk)
+1. Implement `getItems()`, `LazyMinter`, `ExchangeV2`, and other functionality from the protocol flow.
+3. Request feedback from developers in the ecosystem: 
+    - What usecases would yo like to see as demos?
+5. Build simple demo scripts to improve end-user experience.
+6. Prepare more comprehesive documentation.
+
+## Documentation
 
 Read more about the Docs Here
 
 - https://docs.rarible.com/
+
+
